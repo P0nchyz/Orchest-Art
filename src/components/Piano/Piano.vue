@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, onUnmounted, ref } from 'vue';
-import BlackKey from './Piano/BlackKey.vue';
-import WhiteKey from './Piano/WhiteKey.vue';
+import BlackKey from './BlackKey.vue';
+import WhiteKey from './WhiteKey.vue';
 
 const activeNotes = ref({});
 
@@ -130,13 +130,12 @@ function pressKey(key) {
   setTimeout(() => {
     delete activeNotes.value[key.note];
   }, 500)
-
 }
 </script>
 
 <template>
   <div class="flex flex-col w-fit">
-    <span></span>
+    <span class="bg-black h-1"></span>
     <span class="flex">
       <div v-for="keyGroup in pianoKeys" :key="keyGroup.white.note" class="relative">
         <WhiteKey :pressed="activeNotes[keyGroup.white.note]" @click="pressKey(keyGroup.white)"/>
