@@ -20,62 +20,62 @@ const frets = ref([
 ]);
 
 const keyToStrfret = {
-  '1': [1, 2],
-  '2': [2, 2],
-  '3': [3, 2],
-  '4': [4, 2],
-  '5': [5, 2],
-  '6': [6, 2],
-  '7': [7, 2],
-  '8': [8, 2],
-  '9': [9, 2],
-  '0': [10, 2],
-  "'": [11, 2],
-  '¿': [12, 2],
+  'Digit1': [1, 2],
+  'Digit2': [2, 2],
+  'Digit3': [3, 2],
+  'Digit4': [4, 2],
+  'Digit5': [5, 2],
+  'Digit6': [6, 2],
+  'Digit7': [7, 2],
+  'Digit8': [8, 2],
+  'Digit9': [9, 2],
+  'Digit0': [10, 2],
+  'Minus': [11, 2],
+  'Equal': [12, 2],
 
-  'q': [1, 3],
-  'w': [2, 3],
-  'e': [3, 3],
-  'r': [4, 3],
-  't': [5, 3],
-  'y': [6, 3],
-  'u': [7, 3],
-  'i': [8, 3],
-  'o': [9, 3],
-  'p': [10, 3],
-  "´": [11, 3],
-  '+': [12, 3],
+  'KeyQ': [1, 3],
+  'KeyW': [2, 3],
+  'KeyE': [3, 3],
+  'KeyR': [4, 3],
+  'KeyT': [5, 3],
+  'KeyY': [6, 3],
+  'KeyU': [7, 3],
+  'KeyI': [8, 3],
+  'KeyO': [9, 3],
+  'KeyP': [10, 3],
+  'BracketLeft': [11, 3],
+  'BracketRight': [12, 3],
 
-  'a': [1, 4],
-  's': [2, 4],
-  'd': [3, 4],
-  'f': [4, 4],
-  'g': [5, 4],
-  'h': [6, 4],
-  'j': [7, 4],
-  'k': [8, 4],
-  'l': [9, 4],
-  'ñ': [10, 4],
-  "{": [11, 4],
-  '}': [12, 4],
+  'KeyA': [1, 4],
+  'KeyS': [2, 4],
+  'KeyD': [3, 4],
+  'KeyF': [4, 4],
+  'KeyG': [5, 4],
+  'KeyH': [6, 4],
+  'KeyJ': [7, 4],
+  'KeyJ': [8, 4],
+  'KeyL': [9, 4],
+  'Semicolon': [10, 4],
+  "Quote": [11, 4],
+  'Backslash': [12, 4],
 
-  '<': [1, 5],
-  'z': [2, 5],
-  'x': [3, 5],
-  'c': [4, 5],
-  'v': [5, 5],
-  'b': [6, 5],
-  'n': [7, 5],
-  'm': [8, 5],
-  ',': [9, 5],
-  '.': [10, 5],
-  "-": [11, 5],
+  'IntlBackslash': [1, 5],
+  'KeyZ': [2, 5],
+  'KeyX': [3, 5],
+  'KeyC': [4, 5],
+  'KeyV': [5, 5],
+  'KeyB': [6, 5],
+  'KeyN': [7, 5],
+  'KeyM': [8, 5],
+  'Comma': [9, 5],
+  'Period': [10, 5],
+  "Slash": [11, 5],
 }
 
 const handleKeyDown = (event) => {
   if (event.repeat) return;
 
-  const strFret = keyToStrfret[event.key.toLowerCase()];
+  const strFret = keyToStrfret[event.code];
 
   const strFretObject = frets.value[strFret[0]][strFret[1]];
 
@@ -115,10 +115,10 @@ function pressKey(key) {
 
   const now = audioContext.currentTime;
   gainNode.gain.setValueAtTime(0.8, now);
-  gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+  gainNode.gain.exponentialRampToValueAtTime(0.01, now + 1);
 
   oscillator.start(now);
-  oscillator.stop(now + 0.5);
+  oscillator.stop(now + 1);
 
   setTimeout(() => {
     delete activeNotes.value[key.note];
@@ -132,7 +132,7 @@ function pressKey(key) {
     <div class="flex bg-[#703400]">
       <span v-for="fret in frets" class="flex flex-col border-x-2 border-x-white">
         <span v-for="strFret in fret" class="my-1 mx-4">
-          <button @click="pressKey(strFret)">
+          <button @click="pressKey(strFret)" class="text-white">
             {{ strFret.note }}
           </button>
         </span>
