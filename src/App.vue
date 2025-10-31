@@ -1,9 +1,14 @@
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import Guitar from './components/Guitar/Guitar.vue';
 import Piano from './components/Piano/Piano.vue';
+import { useAudioEngine } from './composables/useAudioEngine';
 
 const piano = ref();
+
+onMounted(() => {
+  useAudioEngine().initAudio();
+})
 
 </script>
 

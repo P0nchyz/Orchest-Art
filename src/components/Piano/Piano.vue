@@ -1,39 +1,48 @@
 <script setup>
 import { onMounted, onUnmounted, ref } from 'vue';
+import { useAudioEngine } from '@/composables/useAudioEngine';
 import BlackKey from './BlackKey.vue';
 import WhiteKey from './WhiteKey.vue';
+
+const pianoSamples = {};
+
+const { isLoading, initAudio, loadInstrument, playNote, stopNote } = useAudioEngine();
+
 
 const activeNotes = ref({});
 
 const pianoKeys = ref([
-  { white: { note: 'C3', freq: '131' }, black: { note: 'C#3', freq: '139' } },
-  { white: { note: 'D3', freq: '147' }, black: { note: 'D#3', freq: '156' } },
-  { white: { note: 'E3', freq: '165' }, black: null },
-  { white: { note: 'F3', freq: '175' }, black: { note: 'F#3', freq: '185' } },
-  { white: { note: 'G3', freq: '196' }, black: { note: 'G#3', freq: '208' } },
-  { white: { note: 'A3', freq: '220' }, black: { note: 'A#3', freq: '233' } },
-  { white: { note: 'B3', freq: '247' }, black: null },
-  { white: { note: 'C4', freq: '262' }, black: { note: 'C#4', freq: '277' } },
-  { white: { note: 'D4', freq: '294' }, black: { note: 'D#4', freq: '311' } },
-  { white: { note: 'E4', freq: '330' }, black: null },
-  { white: { note: 'F4', freq: '349' }, black: { note: 'F#4', freq: '370' } },
-  { white: { note: 'G4', freq: '392' }, black: { note: 'G#4', freq: '415' } },
-  { white: { note: 'A4', freq: '440' }, black: { note: 'A#4', freq: '466' } },
-  { white: { note: 'B4', freq: '494' }, black: null },
-  { white: { note: 'C5', freq: '523' }, black: { note: 'C#5', freq: '554' } },
-  { white: { note: 'D5', freq: '587' }, black: { note: 'D#5', freq: '622' } },
-  { white: { note: 'E5', freq: '659' }, black: null },
-  { white: { note: 'F5', freq: '698' }, black: { note: 'F#5', freq: '740' } },
-  { white: { note: 'G5', freq: '784' }, black: { note: 'G#5', freq: '831' } },
-  { white: { note: 'A5', freq: '880' }, black: { note: 'A#5', freq: '932' } },
-  { white: { note: 'B5', freq: '988' }, black: null },
+  { white: { note: 'C3' }, black: { note: 'Cs3' } },
+  { white: { note: 'D3' }, black: { note: 'Ds3' } },
+  { white: { note: 'E3' }, black: null },
+  { white: { note: 'F3' }, black: { note: 'Fs3' } },
+  { white: { note: 'G3' }, black: { note: 'Gs3' } },
+  { white: { note: 'A3' }, black: { note: 'As3' } },
+  { white: { note: 'B3' }, black: null },
+  { white: { note: 'C4' }, black: { note: 'Cs4' } },
+  { white: { note: 'D4' }, black: { note: 'Ds4' } },
+  { white: { note: 'E4' }, black: null },
+  { white: { note: 'F4' }, black: { note: 'Fs4' } },
+  { white: { note: 'G4' }, black: { note: 'Gs4' } },
+  { white: { note: 'A4' }, black: { note: 'As4' } },
+  { white: { note: 'B4' }, black: null },
+  { white: { note: 'C5' }, black: { note: 'Cs5' } },
+  { white: { note: 'D5' }, black: { note: 'Ds5' } },
+  { white: { note: 'E5' }, black: null },
+  { white: { note: 'F5' }, black: { note: 'Fs5' } },
+  { white: { note: 'G5' }, black: { note: 'Gs5' } },
+  { white: { note: 'A5' }, black: { note: 'As5' } },
+  { white: { note: 'B5' }, black: null },
 ]);
 
 const noteMap = {};
 pianoKeys.value.forEach(group => {
   noteMap[group.white.note] = group.white;
+  pianoSamples[group.white.note] = `/samples/Piano.${group.white.note}.mp3`;
+
   if (group.black) {
     noteMap[group.black.note] = group.black;
+    pianoSamples[group.black.note] = `/samples/Piano.${group.black.note}.mp3`;
   }
 });
 
@@ -61,75 +70,62 @@ const keyToNoteMap = {
   'Period': 'A5',
   'Slash': 'B5',
 
-  'Digit2': 'C#3',
-  'Digit3': 'D#3',
-  'Digit5': 'F#3',
-  'Digit6': 'G#3',
-  'Digit7': 'A#3',
-  'Digit9': 'C#4',
-  'Digit0': 'D#4',
-  'KeyA': 'F#4',
-  'KeyS': 'G#4',
-  'KeyD': 'A#4',
-  'KeyG': 'C#5',
-  'KeyH': 'D#5',
-  'KeyK': 'F#5',
-  'KeyL': 'G#5',
-  'Semicolon': 'A#5',
+  'Digit2': 'Cs3',
+  'Digit3': 'Ds3',
+  'Digit5': 'Fs3',
+  'Digit6': 'Gs3',
+  'Digit7': 'As3',
+  'Digit9': 'Cs4',
+  'Digit0': 'Ds4',
+  'KeyA': 'Fs4',
+  'KeyS': 'Gs4',
+  'KeyD': 'As4',
+  'KeyG': 'Cs5',
+  'KeyH': 'Ds5',
+  'KeyK': 'Fs5',
+  'KeyL': 'Gs5',
+  'Semicolon': 'As5',
 };
 
 const handleKeyDown = (event) => {
   if (event.repeat) return;
 
   const noteName = keyToNoteMap[event.code];
+  activeNotes.value[noteName] = true;
 
   const keyObject = noteMap[noteName];
 
   pressKey(keyObject);
 };
 
-onMounted(() => {
+const handleKeyUp = (event) => {
+  const noteName = keyToNoteMap[event.code];
+
+  activeNotes.value[noteName] = false;
+
+  const keyObject = noteMap[noteName];
+
+  if (keyObject && keyObject.note) {
+    stopNote(keyObject.note);
+  }
+}
+
+onMounted(async () => {
   window.addEventListener('keydown', handleKeyDown);
+  window.addEventListener('keyup', handleKeyUp);
+  await initAudio();
+
+  loadInstrument('piano', pianoSamples);
 });
 
 onUnmounted(() => {
   window.removeEventListener('keydown', handleKeyDown);
+  window.removeEventListener('keyup', handleKeyUp);
 })
-
-// CHATGPTEADO
-let audioContext = null;
-
-function initializeAudio() {
-  if (!audioContext) {
-    audioContext = new window.AudioContext();
-  }
-}
 
 function pressKey(key) {
   if (!key) return;
-  initializeAudio();
-
-  activeNotes.value[key.note] = true;
-
-  const oscillator = audioContext.createOscillator();
-  const gainNode = audioContext.createGain();
-
-  oscillator.connect(gainNode);
-  gainNode.connect(audioContext.destination);
-
-  oscillator.type = 'triangle';
-  oscillator.frequency.setValueAtTime(key.freq, audioContext.currentTime);
-
-  const now = audioContext.currentTime;
-  gainNode.gain.setValueAtTime(0.8, now);
-  gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
-
-  oscillator.start(now);
-  oscillator.stop(now + 0.5);
-
-  setTimeout(() => {
-    delete activeNotes.value[key.note];
-  }, 500)
+  playNote(key.note);
 }
 </script>
 
@@ -138,9 +134,10 @@ function pressKey(key) {
     <span class="bg-black h-1"></span>
     <span class="flex">
       <div v-for="keyGroup in pianoKeys" :key="keyGroup.white.note" class="relative">
-        <WhiteKey :pressed="activeNotes[keyGroup.white.note]" @click="pressKey(keyGroup.white)"/>
+        <WhiteKey :pressed="activeNotes[keyGroup.white.note]" @click="pressKey(keyGroup.white)" />
         <div v-if="keyGroup.black">
-          <BlackKey class="absolute top-0 -right-4 z-2" :pressed="activeNotes[keyGroup.black.note]" @click="pressKey[keyGroup.black]"/>
+          <BlackKey class="absolute top-0 -right-4 z-2" :pressed="activeNotes[keyGroup.black.note]"
+            @click="alert('hi')" />
         </div>
       </div>
     </span>
