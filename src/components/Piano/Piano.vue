@@ -110,6 +110,21 @@ const handleKeyUp = (event) => {
   }
 }
 
+const handleKeyPress = (noteName) => {
+  activeNotes.value[noteName] = true;
+  const keyObject = noteMap[noteName];
+  pressKey(keyObject);
+}
+
+const handleKeyRelease = (noteName) => {
+  activeNotes.value[noteName] = false;
+  const keyObject = noteMap[noteName];
+
+  if (keyObject && keyObject.note) {
+    stopNote(keyObject.note);
+  }
+}
+
 onMounted(async () => {
   window.addEventListener('keydown', handleKeyDown);
   window.addEventListener('keyup', handleKeyUp);
@@ -134,10 +149,11 @@ function pressKey(key) {
     <span class="bg-black h-1"></span>
     <span class="flex">
       <div v-for="keyGroup in pianoKeys" :key="keyGroup.white.note" class="relative">
-        <WhiteKey :pressed="activeNotes[keyGroup.white.note]" @click="pressKey(keyGroup.white)" />
+        <WhiteKey :pressed="activeNotes[keyGroup.white.note]" @keyPress="handleKeyPress(keyGroup.white.note)"
+          @keyRelease="handleKeyRelease(keyGroup.white.note)" />
         <div v-if="keyGroup.black">
           <BlackKey class="absolute top-0 -right-4 z-2" :pressed="activeNotes[keyGroup.black.note]"
-            @click="alert('hi')" />
+            @keyPress="handleKeyPress(keyGroup.black.note)" @keyRelease="handleKeyRelease(keyGroup.black.note)" />
         </div>
       </div>
     </span>
