@@ -4,6 +4,8 @@ import { useAudioEngine } from '@/composables/useAudioEngine';
 import BlackKey from './BlackKey.vue';
 import WhiteKey from './WhiteKey.vue';
 
+const BASE_URL = import.meta.env.BASE_URL;
+
 const pianoSamples = {};
 
 const { isLoading, initAudio, loadInstrument, playNote, stopNote } = useAudioEngine();
@@ -38,11 +40,11 @@ const pianoKeys = ref([
 const noteMap = {};
 pianoKeys.value.forEach(group => {
   noteMap[group.white.note] = group.white;
-  pianoSamples[group.white.note] = `/samples/Piano.${group.white.note}.mp3`;
+  pianoSamples[group.white.note] = `${BASE_URL}/samples/Piano.${group.white.note}.mp3`;
 
   if (group.black) {
     noteMap[group.black.note] = group.black;
-    pianoSamples[group.black.note] = `/samples/Piano.${group.black.note}.mp3`;
+    pianoSamples[group.black.note] = `${BASE_URL}/samples/Piano.${group.black.note}.mp3`;
   }
 });
 
