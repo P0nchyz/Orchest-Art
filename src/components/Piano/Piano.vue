@@ -6,10 +6,8 @@ import WhiteKey from './WhiteKey.vue';
 
 const BASE_URL = import.meta.env.BASE_URL;
 
-const pianoSamples = {};
 
-const { isLoading, initAudio, loadInstrument, playNote, stopNote } = useAudioEngine();
-
+const { initAudio, loadInstrument, playNote, stopNote } = useAudioEngine();
 
 const activeNotes = ref({});
 
@@ -37,7 +35,10 @@ const pianoKeys = ref([
   { white: { note: 'B5' }, black: null },
 ]);
 
+const pianoSamples = {};
+
 const noteMap = {};
+
 pianoKeys.value.forEach(group => {
   noteMap[group.white.note] = group.white;
   pianoSamples[group.white.note] = `${BASE_URL}/samples/Piano.${group.white.note}.mp3`;

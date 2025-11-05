@@ -1,22 +1,27 @@
 <script setup>
+import { useAudioEngine } from '@/composables/useAudioEngine';
 import { onMounted, onUnmounted, ref } from 'vue';
+
+const BASE_URL = import.meta.env.BASE_URL;
+
+const { initAudio, loadInstrument, playNote, stopNote } = useAudioEngine();
 
 const activeNotes = ref({});
 
 const frets = ref([
-  [{ note: 'E4', freq: '330' }, { note: 'B3', freq: '247' }, { note: 'G3', freq: '196' }, { note: 'D3', freq: '147' }, { note: 'A2', freq: '110' }, { note: 'E2', freq: '82' }],
-  [{ note: 'F4', freq: '349' }, { note: 'C4', freq: '362' }, { note: 'G#3', freq: '208' }, { note: 'D#3', freq: '156' }, { note: 'A#2', freq: '117' }, { note: 'F2', freq: '87' }],
-  [{ note: 'F#4', freq: '370' }, { note: 'C#4', freq: '377' }, { note: 'A3', freq: '220' }, { note: 'E3', freq: '165' }, { note: 'B2', freq: '123' }, { note: 'F#2', freq: '92' }],
-  [{ note: 'G4', freq: '392' }, { note: 'D4', freq: '394' }, { note: 'A#3', freq: '233' }, { note: 'F3', freq: '175' }, { note: 'C3', freq: '131' }, { note: 'G2', freq: '98' }],
-  [{ note: 'G#4', freq: '415' }, { note: 'D#4', freq: '311' }, { note: 'B3', freq: '247' }, { note: 'F#3', freq: '185' }, { note: 'C#3', freq: '139' }, { note: 'G#2', freq: '104' }],
-  [{ note: 'A4', freq: '440' }, { note: 'E4', freq: '330' }, { note: 'C4', freq: '262' }, { note: 'G3', freq: '196' }, { note: 'D3', freq: '147' }, { note: 'A2', freq: '110' }],
-  [{ note: 'A#4', freq: '466' }, { note: 'F4', freq: '349' }, { note: 'C#4', freq: '277' }, { note: 'G#3', freq: '208' }, { note: 'D#3', freq: '156' }, { note: 'A#2', freq: '117' }],
-  [{ note: 'B4', freq: '494' }, { note: 'F#4', freq: '370' }, { note: 'D4', freq: '294' }, { note: 'A3', freq: '220' }, { note: 'E3', freq: '165' }, { note: 'B2', freq: '123' }],
-  [{ note: 'C5', freq: '523' }, { note: 'G4', freq: '392' }, { note: 'D#4', freq: '311' }, { note: 'A#3', freq: '233' }, { note: 'F3', freq: '175' }, { note: 'C3', freq: '131' }],
-  [{ note: 'C#5', freq: '554' }, { note: 'G#4', freq: '415' }, { note: 'E4', freq: '330' }, { note: 'B3', freq: '247' }, { note: 'F#3', freq: '185' }, { note: 'C#3', freq: '139' }],
-  [{ note: 'D5', freq: '587' }, { note: 'A4', freq: '440' }, { note: 'F4', freq: '349' }, { note: 'C4', freq: '262' }, { note: 'G3', freq: '196' }, { note: 'D3', freq: '147' }],
-  [{ note: 'D#5', freq: '662' }, { note: 'A#4', freq: '466' }, { note: 'F#4', freq: '370' }, { note: 'C#4', freq: '277' }, { note: 'G#3', freq: '208' }, { note: 'D#3', freq: '156' }],
-  [{ note: 'E5', freq: '659' }, { note: 'B4', freq: '494' }, { note: 'G4', freq: '392' }, { note: 'D4', freq: '294' }, { note: 'A3', freq: '220' }, { note: 'E3', freq: '165' }],
+  [{ note: 'E4' }, { note: 'B3' }, { note: 'G3' }, { note: 'D3' }, { note: 'A2' }, { note: 'E2' }],
+  [{ note: 'F4' }, { note: 'C4' }, { note: 'Gs3' }, { note: 'Ds3' }, { note: 'As2' }, { note: 'F2' }],
+  [{ note: 'Fs4' }, { note: 'Cs4' }, { note: 'A3' }, { note: 'E3' }, { note: 'B2' }, { note: 'Fs2' }],
+  [{ note: 'G4' }, { note: 'D4' }, { note: 'As3' }, { note: 'F3' }, { note: 'C3' }, { note: 'G2' }],
+  [{ note: 'Gs4' }, { note: 'Ds4' }, { note: 'B3' }, { note: 'Fs3' }, { note: 'Cs3' }, { note: 'Gs2' }],
+  [{ note: 'A4' }, { note: 'E4' }, { note: 'C4' }, { note: 'G3' }, { note: 'D3' }, { note: 'A2' }],
+  [{ note: 'As4' }, { note: 'F4' }, { note: 'Cs4' }, { note: 'Gs3' }, { note: 'Ds3' }, { note: 'As2' }],
+  [{ note: 'B4' }, { note: 'Fs4' }, { note: 'D4' }, { note: 'A3' }, { note: 'E3' }, { note: 'B2' }],
+  [{ note: 'C5' }, { note: 'G4' }, { note: 'Ds4' }, { note: 'As3' }, { note: 'F3' }, { note: 'C3' }],
+  [{ note: 'Cs5' }, { note: 'Gs4' }, { note: 'E4' }, { note: 'B3' }, { note: 'Fs3' }, { note: 'Cs3' }],
+  [{ note: 'D5' }, { note: 'A4' }, { note: 'F4' }, { note: 'C4' }, { note: 'G3' }, { note: 'D3' }],
+  [{ note: 'Ds5' }, { note: 'As4' }, { note: 'Fs4' }, { note: 'Cs4' }, { note: 'Gs3' }, { note: 'Ds3' }],
+  [{ note: 'E5' }, { note: 'B4' }, { note: 'G4' }, { note: 'D4' }, { note: 'A3' }, { note: 'E3' }],
 ]);
 
 const keyToStrfret = {
@@ -53,7 +58,7 @@ const keyToStrfret = {
   'KeyG': [5, 4],
   'KeyH': [6, 4],
   'KeyJ': [7, 4],
-  'KeyJ': [8, 4],
+  'KeyK': [8, 4],
   'KeyL': [9, 4],
   'Semicolon': [10, 4],
   "Quote": [11, 4],
@@ -70,69 +75,64 @@ const keyToStrfret = {
   'Comma': [9, 5],
   'Period': [10, 5],
   "Slash": [11, 5],
-}
+};
+
+const guitarSamples = {};
+
+frets.value.forEach(fret => {
+  fret.forEach(strFret => {
+    guitarSamples[strFret.note] = `${BASE_URL}/samples/Guitar.${strFret.note}.mp3`;
+  })
+})
 
 const handleKeyDown = (event) => {
   if (event.repeat) return;
 
   const strFret = keyToStrfret[event.code];
+  activeNotes.value[`${strFret[0]}${strFret[1]}`] = true;
 
   const strFretObject = frets.value[strFret[0]][strFret[1]];
 
   pressKey(strFretObject);
 }
 
-onMounted(() => {
+const handleKeyUp = (event) => {
+  const strFret = keyToStrfret[event.code];
+  activeNotes.value[`${strFret[0]}${strFret[1]}`] = false;
+
+  const strFretObject = frets.value[strFret[0]][strFret[1]];
+
+  if (strFretObject && strFretObject.note) {
+    // stopNote(strFretObject.note);
+  }
+}
+
+onMounted(async () => {
   window.addEventListener('keydown', handleKeyDown);
+  window.addEventListener('keyup', handleKeyUp);
+  await initAudio();
+
+  loadInstrument('guitar', guitarSamples);
 });
 
 onUnmounted(() => {
   window.removeEventListener('keydown', handleKeyDown);
+  window.removeEventListener('keyup', handleKeyUp);
 })
-
-// CHATGPTEADO
-let audioContext = null;
-
-function initializeAudio() {
-  if (!audioContext) {
-    audioContext = new window.AudioContext();
-  }
-}
 
 function pressKey(key) {
   if (!key) return;
-  initializeAudio();
-
-  activeNotes.value[key.note] = true;
-
-  const oscillator = audioContext.createOscillator();
-  const gainNode = audioContext.createGain();
-
-  oscillator.connect(gainNode);
-  gainNode.connect(audioContext.destination);
-
-  oscillator.frequency.setValueAtTime(key.freq, audioContext.currentTime);
-
-  const now = audioContext.currentTime;
-  gainNode.gain.setValueAtTime(0.8, now);
-  gainNode.gain.exponentialRampToValueAtTime(0.01, now + 1);
-
-  oscillator.start(now);
-  oscillator.stop(now + 1);
-
-  setTimeout(() => {
-    delete activeNotes.value[key.note];
-  }, 500)
+  playNote(key.note);
 }
 
 </script>
 
 <template>
   <div>
-    <div class="flex bg-[#703400]">
-      <span v-for="fret in frets" class="flex flex-col border-x-2 border-x-white">
-        <span v-for="strFret in fret" class="my-1 mx-4">
-          <button @click="pressKey(strFret)" class="text-white">
+    <div class="flex bg-red-600">
+      <span v-for="(fret, i) in frets" class="flex flex-col border-x-2 border-x-white">
+        <span v-for="(strFret, j) in fret" class="my-1 mx-4">
+          <button @click="pressKey(strFret)" class="text-white" :class="(activeNotes[`${i}${j}`]) ? 'bg-amber-400' : ''">
             {{ strFret.note }}
           </button>
         </span>
