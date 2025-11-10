@@ -4,7 +4,7 @@ import { onMounted, onUnmounted, ref } from 'vue';
 
 const BASE_URL = import.meta.env.BASE_URL;
 
-const { initAudio, loadInstrument, playNote, stopNote } = useAudioEngine();
+const { loadInstrument, playNote, stopNote } = useAudioEngine();
 
 const activeNotes = ref({});
 
@@ -107,10 +107,9 @@ const handleKeyUp = (event) => {
   }
 }
 
-onMounted(async () => {
+onMounted(() => {
   window.addEventListener('keydown', handleKeyDown);
   window.addEventListener('keyup', handleKeyUp);
-  await initAudio();
 
   loadInstrument('guitar', guitarSamples);
 });

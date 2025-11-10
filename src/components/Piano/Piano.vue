@@ -7,7 +7,7 @@ import WhiteKey from './WhiteKey.vue';
 const BASE_URL = import.meta.env.BASE_URL;
 
 
-const { initAudio, loadInstrument, playNote, stopNote } = useAudioEngine();
+const { loadInstrument, playNote, stopNote } = useAudioEngine();
 
 const activeNotes = ref({});
 
@@ -128,10 +128,9 @@ const handleKeyRelease = (noteName) => {
   }
 }
 
-onMounted(async () => {
+onMounted(() => {
   window.addEventListener('keydown', handleKeyDown);
   window.addEventListener('keyup', handleKeyUp);
-  await initAudio();
 
   loadInstrument('piano', pianoSamples);
 });
