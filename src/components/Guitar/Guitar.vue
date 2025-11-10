@@ -24,6 +24,7 @@ const frets = ref([
   [{ note: 'E5' }, { note: 'B4' }, { note: 'G4' }, { note: 'D4' }, { note: 'A3' }, { note: 'E3' }],
 ]);
 
+// FIX: Very Badly Designed. Switch to Object or Summ
 const keyToStrfret = {
   'Digit1': [1, 2],
   'Digit2': [2, 2],
@@ -107,6 +108,17 @@ const handleKeyUp = (event) => {
   }
 }
 
+const handleKeyPress = (strFret) => {
+  activeNotes.value[`${strFret[0]}${strFret[1]}`] = true;
+
+  const strFretObject = frets.value[strFret[0]][strFret[1]];
+  pressKey(strFretObject);
+}
+
+const handleKeyRelease = (strFret) => {
+  activeNotes.value[`${strFret[0]}${strFret[1]}`] = false;
+}
+
 onMounted(() => {
   window.addEventListener('keydown', handleKeyDown);
   window.addEventListener('keyup', handleKeyUp);
@@ -128,10 +140,13 @@ function pressKey(key) {
 
 <template>
   <div>
-    <div class="flex bg-red-600">
+    <div class="flex bg-[#141414]">
       <span v-for="(fret, i) in frets" class="flex flex-col border-x-2 border-x-white">
         <span v-for="(strFret, j) in fret" class="my-1 mx-4">
-          <button @click="pressKey(strFret)" class="text-white" :class="(activeNotes[`${i}${j}`]) ? 'bg-amber-400' : ''">
+          <button class="text-white" :class="(activeNotes[`${i}${j}`]) ? 'bg-amber-400' : ''"
+            @mousedown="handleKeyPress([i, j])" @mouseup="handleKeyRelease([i, j])"
+            @mouseleave="handleKeyRelease([i, j])" @touchstart.prevent="handleKeyPress([i, j])"
+            @touchend.prevent="handleKeyRelease([i, j])" @touchcancel.prevent="handleKeyRelease([i, j])">
             {{ strFret.note }}
           </button>
         </span>
