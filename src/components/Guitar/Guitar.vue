@@ -134,16 +134,32 @@ const handleKeyDown = (event) => {
     isShifting.value = true;
     return;
   }
-  const strFret = keyToStrfret[event.code];
-  activeNotes.value.push(strFret);
-  if (isShifting.value) {
-    const strFretObject = frets.value[strFret.fret][strFret.str];
-    pressKey(strFretObject);
+
+  if (event.code === 'ArrowRight') {
+    if (capoPos.value < 13) capoPos.value += 1;
+    return;
   }
+
+  if (event.code === 'ArrowLeft') {
+    if (capoPos.value > 0) capoPos.value -= 1;
+    return;
+  }
+
+  if (event.code in keyToStrfret) {
+    const strFret = keyToStrfret[event.code];
+    activeNotes.value.push(strFret);
+    if (isShifting.value) {
+      const strFretObject = frets.value[strFret.fret][strFret.str];
+      pressKey(strFretObject);
+    }
+
+  }
+
 }
 
-const playPressedKeys = (strumDir) => {
+const capoPos = ref(0);
 
+const playPressedKeys = (strumDir) => {
   const highestPerString = Array.from({ length: 6 }, (_, i) => i).map(str =>
     activeNotes.value.filter(n => n.str === str)
       .reduce((max, n) => (max === null || n.fret > max.fret ? n : max), null)
@@ -153,7 +169,7 @@ const playPressedKeys = (strumDir) => {
   if (strumDir === 'up') {
     for (let i = 0; i < 6; i++) {
       const strFret = highestPerString[5 - i];
-      const strFretObject = (strFret) ? frets.value[strFret.fret][strFret.str] : frets.value[0][5 - i];
+      const strFretObject = (strFret) ? frets.value[strFret.fret][strFret.str] : frets.value[capoPos.value][5 - i];
       console.log(`played ${strFretObject.note}`);
 
       setTimeout(() => playNote(strFretObject.note), i * 10);
@@ -161,30 +177,25 @@ const playPressedKeys = (strumDir) => {
   } else if (strumDir === 'down') {
     for (let i = 0; i < 6; i++) {
       const strFret = highestPerString[i];
-      const strFretObject = (strFret) ? frets.value[strFret.fret][strFret.str] : frets.value[0][i];
+      const strFretObject = (strFret) ? frets.value[strFret.fret][strFret.str] : frets.value[capoPos.value][i];
       console.log(`played ${strFretObject.note}`);
       setTimeout(() => playNote(strFretObject.note), i * 10);
     }
   }
   console.log('-----\n');
-
 }
 
 const handleKeyUp = (event) => {
-  if (event.code === 'ArrowUp' || event.code === 'ArrowDown' || event.code === 'Numpad8' || event.code === 'Numpad2') {
-    return;
-  }
   if (event.code === 'ShiftLeft') {
     isShifting.value = false;
     return;
   }
-  const strFret = keyToStrfret[event.code];
 
-  const strFretIndex = activeNotes.value.indexOf(strFret);
-  activeNotes.value.splice(strFretIndex);
-
-  const strFretObject = frets.value[strFret.fret][strFret.str];
-
+  if (event.code in keyToStrfret) {
+    const strFret = keyToStrfret[event.code];
+    const strFretIndex = activeNotes.value.indexOf(strFret);
+    activeNotes.value.splice(strFretIndex);
+  }
 }
 
 /**
@@ -224,6 +235,16 @@ function pressKey(key) {
   if (!key) return;
   playNote(key.note);
 }
+/** @param {GuitarPos} strFret  */
+function buttonClass(strFret) {
+  if (strFret.fret === capoPos.value) {
+    return 'bg-blue-800';
+  }
+  if (activeNotes.value.some(e => e.fret === strFret.fret && e.str === strFret.str)) {
+    return 'bg-blue-400';
+  }
+  return 'bg-transparent';
+}
 
 </script>
 
@@ -232,7 +253,7 @@ function pressKey(key) {
     <div class="flex bg-[#141414]">
       <span v-for="(fret, i) in frets" class="flex flex-col border-x-2 border-x-white">
         <span v-for="(strFret, j) in fret" class="my-1 mx-4">
-          <button class="text-white" :class="(activeNotes.some(e => e.fret === i && e.str === j)) ? 'bg-amber-400' : ''"
+          <button class="text-white" :class="buttonClass({ fret: i, str: j })"
             @mousedown="handleKeyPress({ fret: i, str: j })" @mouseup="handleKeyRelease({ fret: i, str: j })"
             @mouseleave="handleKeyRelease({ fret: i, str: j })"
             @touchstart.prevent="handleKeyPress({ fret: i, str: j })"
