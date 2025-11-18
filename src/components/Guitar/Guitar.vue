@@ -6,7 +6,6 @@ const BASE_URL = import.meta.env.BASE_URL;
 
 const { loadInstrument, playNote, stopNote } = useAudioEngine();
 
-const activeNotes = ref({});
 
 /**
  * @typedef {Object} Note
@@ -46,56 +45,65 @@ const frets = ref([
  * @type {{ [key: String]: GuitarPos }}
  */
 const keyToStrfret = {
-  'Digit1': { fret: 1, str: 2 },
-  'Digit2': { fret: 2, str: 2 },
-  'Digit3': { fret: 3, str: 2 },
-  'Digit4': { fret: 4, str: 2 },
-  'Digit5': { fret: 5, str: 2 },
-  'Digit6': { fret: 6, str: 2 },
-  'Digit7': { fret: 7, str: 2 },
-  'Digit8': { fret: 8, str: 2 },
-  'Digit9': { fret: 9, str: 2 },
-  'Digit0': { fret: 10, str: 2 },
-  'Minus': { fret: 11, str: 2 },
-  'Equal': { fret: 12, str: 2 },
+  'Digit1': { fret: 1, str: 0 },
+  'KeyQ': { fret: 2, str: 0 },
+  'KeyA': { fret: 3, str: 0 },
+  'IntlBackslash': { fret: 4, str: 0 },
 
-  'KeyQ': { fret: 1, str: 3 },
-  'KeyW': { fret: 2, str: 3 },
-  'KeyE': { fret: 3, str: 3 },
-  'KeyR': { fret: 4, str: 3 },
-  'KeyT': { fret: 5, str: 3 },
-  'KeyY': { fret: 6, str: 3 },
-  'KeyU': { fret: 7, str: 3 },
-  'KeyI': { fret: 8, str: 3 },
-  'KeyO': { fret: 9, str: 3 },
-  'KeyP': { fret: 10, str: 3 },
-  'BracketLeft': { fret: 11, str: 3 },
-  'BracketRight': { fret: 12, str: 3 },
+  'Digit2': { fret: 1, str: 1 },
+  'KeyW': { fret: 2, str: 1 },
+  'KeyS': { fret: 3, str: 1 },
+  'KeyZ': { fret: 4, str: 1 },
 
-  'KeyA': { fret: 1, str: 4 },
-  'KeyS': { fret: 2, str: 4 },
-  'KeyD': { fret: 3, str: 4 },
-  'KeyF': { fret: 4, str: 4 },
-  'KeyG': { fret: 5, str: 4 },
-  'KeyH': { fret: 6, str: 4 },
-  'KeyJ': { fret: 7, str: 4 },
-  'KeyK': { fret: 8, str: 4 },
-  'KeyL': { fret: 9, str: 4 },
-  'Semicolon': { fret: 10, str: 4 },
-  'Quote': { fret: 11, str: 4 },
-  'Backslash': { fret: 12, str: 4 },
+  'Digit3': { fret: 1, str: 2 },
+  'KeyE': { fret: 2, str: 2 },
+  'KeyD': { fret: 3, str: 2 },
+  'KeyX': { fret: 4, str: 2 },
 
-  'IntlBackslash': { fret: 1, str: 5 },
-  'KeyZ': { fret: 2, str: 5 },
-  'KeyX': { fret: 3, str: 5 },
-  'KeyC': { fret: 4, str: 5 },
-  'KeyV': { fret: 5, str: 5 },
-  'KeyB': { fret: 6, str: 5 },
-  'KeyN': { fret: 7, str: 5 },
-  'KeyM': { fret: 8, str: 5 },
-  'Comma': { fret: 9, str: 5 },
-  'Period': { fret: 10, str: 5 },
-  'Slash': { fret: 11, str: 5 },
+  'Digit4': { fret: 1, str: 3 },
+  'KeyR': { fret: 2, str: 3 },
+  'KeyF': { fret: 3, str: 3 },
+  'KeyC': { fret: 4, str: 3 },
+
+  'Digit5': { fret: 1, str: 4 },
+  'KeyT': { fret: 2, str: 4 },
+  'KeyG': { fret: 3, str: 4 },
+  'KeyV': { fret: 4, str: 4 },
+
+  'Digit6': { fret: 1, str: 5 },
+  'KeyY': { fret: 2, str: 5 },
+  'KeyH': { fret: 3, str: 5 },
+  'KeyB': { fret: 4, str: 5 },
+
+  'Digit7': { fret: 5, str: 0 },
+  'KeyU': { fret: 6, str: 0 },
+  'KeyJ': { fret: 7, str: 0 },
+  'KeyN': { fret: 8, str: 0 },
+
+  'Digit8': { fret: 5, str: 1 },
+  'KeyI': { fret: 6, str: 1 },
+  'KeyK': { fret: 7, str: 1 },
+  'KeyM': { fret: 8, str: 1 },
+
+  'Digit9': { fret: 5, str: 2 },
+  'KeyO': { fret: 6, str: 2 },
+  'KeyL': { fret: 7, str: 2 },
+  'Comma': { fret: 8, str: 2 },
+
+  'Digit0': { fret: 5, str: 3 },
+  'KeyP': { fret: 6, str: 3 },
+  'Semicolon': { fret: 7, str: 3 },
+  'Period': { fret: 8, str: 3 },
+
+  'Minus': { fret: 5, str: 4 },
+  'BracketLeft': { fret: 6, str: 4 },
+  'Quote': { fret: 7, str: 4 },
+  'Slash': { fret: 8, str: 4 },
+
+  'Equal': { fret: 5, str: 5 },
+  'BracketRight': { fret: 6, str: 5 },
+  'Backslash': { fret: 7, str: 5 },
+  'ShiftRight': { fret: 8, str: 5 },
 };
 
 const guitarSamples = {};
@@ -106,26 +114,77 @@ frets.value.forEach(fret => {
   })
 })
 
+/** @type {import('vue').Ref<GuitarPos[]>} */
+const activeNotes = ref([]);
+const isShifting = ref(false);
+
 const handleKeyDown = (event) => {
   if (event.repeat) return;
 
+  if (event.code === 'ArrowUp' || event.code === 'Numpad8') {
+    playPressedKeys('up');
+    return;
+  }
+  if (event.code === 'ArrowDown' || event.code === 'Numpad2') {
+    playPressedKeys('down');
+    return;
+  }
+
+  if (event.code === 'ShiftLeft') {
+    isShifting.value = true;
+    return;
+  }
   const strFret = keyToStrfret[event.code];
-  activeNotes.value[`${strFret.fret}${strFret.str}`] = true;
+  activeNotes.value.push(strFret);
+  if (isShifting.value) {
+    const strFretObject = frets.value[strFret.fret][strFret.str];
+    pressKey(strFretObject);
+  }
+}
 
-  const strFretObject = frets.value[strFret.fret][strFret.str];
+const playPressedKeys = (strumDir) => {
 
-  pressKey(strFretObject);
+  const highestPerString = Array.from({ length: 6 }, (_, i) => i).map(str =>
+    activeNotes.value.filter(n => n.str === str)
+      .reduce((max, n) => (max === null || n.fret > max.fret ? n : max), null)
+  );
+
+  console.log('-----');
+  if (strumDir === 'up') {
+    for (let i = 0; i < 6; i++) {
+      const strFret = highestPerString[5 - i];
+      const strFretObject = (strFret) ? frets.value[strFret.fret][strFret.str] : frets.value[0][5 - i];
+      console.log(`played ${strFretObject.note}`);
+
+      setTimeout(() => playNote(strFretObject.note), i * 10);
+    }
+  } else if (strumDir === 'down') {
+    for (let i = 0; i < 6; i++) {
+      const strFret = highestPerString[i];
+      const strFretObject = (strFret) ? frets.value[strFret.fret][strFret.str] : frets.value[0][i];
+      console.log(`played ${strFretObject.note}`);
+      setTimeout(() => playNote(strFretObject.note), i * 10);
+    }
+  }
+  console.log('-----\n');
+
 }
 
 const handleKeyUp = (event) => {
+  if (event.code === 'ArrowUp' || event.code === 'ArrowDown' || event.code === 'Numpad8' || event.code === 'Numpad2') {
+    return;
+  }
+  if (event.code === 'ShiftLeft') {
+    isShifting.value = false;
+    return;
+  }
   const strFret = keyToStrfret[event.code];
-  activeNotes.value[`${strFret.fret}${strFret.str}`] = false;
+
+  const strFretIndex = activeNotes.value.indexOf(strFret);
+  activeNotes.value.splice(strFretIndex);
 
   const strFretObject = frets.value[strFret.fret][strFret.str];
 
-  if (strFretObject && strFretObject.note) {
-    // stopNote(strFretObject.note);
-  }
 }
 
 /**
@@ -133,7 +192,7 @@ const handleKeyUp = (event) => {
  * @param {GuitarPos} strFret 
  */
 const handleKeyPress = (strFret) => {
-  activeNotes.value[`${strFret.fret}${strFret.str}`] = true;
+  activeNotes.value.push(strFret)
 
   const strFretObject = frets.value[strFret.fret][strFret.str];
   pressKey(strFretObject);
@@ -144,7 +203,8 @@ const handleKeyPress = (strFret) => {
  * @param {GuitarPos} strFret
  */
 const handleKeyRelease = (strFret) => {
-  activeNotes.value[`${strFret.fret}${strFret.str}`] = false;
+  const strFretIndex = activeNotes.value.indexOf(strFret);
+  activeNotes.value.splice(strFretIndex);
 }
 
 onMounted(() => {
@@ -159,6 +219,7 @@ onUnmounted(() => {
   window.removeEventListener('keyup', handleKeyUp);
 })
 
+/**@param {Note} key  */
 function pressKey(key) {
   if (!key) return;
   playNote(key.note);
@@ -171,10 +232,12 @@ function pressKey(key) {
     <div class="flex bg-[#141414]">
       <span v-for="(fret, i) in frets" class="flex flex-col border-x-2 border-x-white">
         <span v-for="(strFret, j) in fret" class="my-1 mx-4">
-          <button class="text-white" :class="(activeNotes[`${i}${j}`]) ? 'bg-amber-400' : ''"
+          <button class="text-white" :class="(activeNotes.some(e => e.fret === i && e.str === j)) ? 'bg-amber-400' : ''"
             @mousedown="handleKeyPress({ fret: i, str: j })" @mouseup="handleKeyRelease({ fret: i, str: j })"
-            @mouseleave="handleKeyRelease({ fret: i, str: j })" @touchstart.prevent="handleKeyPress({ fret: i, str: j })"
-            @touchend.prevent="handleKeyRelease({ fret: i, str: j })" @touchcancel.prevent="handleKeyRelease({ fret: i, str: j })">
+            @mouseleave="handleKeyRelease({ fret: i, str: j })"
+            @touchstart.prevent="handleKeyPress({ fret: i, str: j })"
+            @touchend.prevent="handleKeyRelease({ fret: i, str: j })"
+            @touchcancel.prevent="handleKeyRelease({ fret: i, str: j })">
             {{ strFret.note }}
           </button>
         </span>
