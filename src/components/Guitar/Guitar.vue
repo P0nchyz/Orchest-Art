@@ -45,65 +45,65 @@ const frets = ref([
  * @type {{ [key: String]: GuitarPos }}
  */
 const keyToStrfret = {
-  'Digit1': { fret: 1, str: 0 },
-  'KeyQ': { fret: 2, str: 0 },
-  'KeyA': { fret: 3, str: 0 },
-  'IntlBackslash': { fret: 4, str: 0 },
+  'Digit1': { fret: 4, str: 0 },
+  'KeyQ': { fret: 3, str: 0 },
+  'KeyA': { fret: 2, str: 0 },
+  'IntlBackslash': { fret: 1, str: 0 },
 
-  'Digit2': { fret: 1, str: 1 },
-  'KeyW': { fret: 2, str: 1 },
-  'KeyS': { fret: 3, str: 1 },
-  'KeyZ': { fret: 4, str: 1 },
+  'Digit2': { fret: 4, str: 1 },
+  'KeyW': { fret: 3, str: 1 },
+  'KeyS': { fret: 2, str: 1 },
+  'KeyZ': { fret: 1, str: 1 },
 
-  'Digit3': { fret: 1, str: 2 },
-  'KeyE': { fret: 2, str: 2 },
-  'KeyD': { fret: 3, str: 2 },
-  'KeyX': { fret: 4, str: 2 },
+  'Digit3': { fret: 4, str: 2 },
+  'KeyE': { fret: 3, str: 2 },
+  'KeyD': { fret: 2, str: 2 },
+  'KeyX': { fret: 1, str: 2 },
 
-  'Digit4': { fret: 1, str: 3 },
-  'KeyR': { fret: 2, str: 3 },
-  'KeyF': { fret: 3, str: 3 },
-  'KeyC': { fret: 4, str: 3 },
+  'Digit4': { fret: 4, str: 3 },
+  'KeyR': { fret: 3, str: 3 },
+  'KeyF': { fret: 2, str: 3 },
+  'KeyC': { fret: 1, str: 3 },
 
-  'Digit5': { fret: 1, str: 4 },
-  'KeyT': { fret: 2, str: 4 },
-  'KeyG': { fret: 3, str: 4 },
-  'KeyV': { fret: 4, str: 4 },
+  'Digit5': { fret: 4, str: 4 },
+  'KeyT': { fret: 3, str: 4 },
+  'KeyG': { fret: 2, str: 4 },
+  'KeyV': { fret: 1, str: 4 },
 
-  'Digit6': { fret: 1, str: 5 },
-  'KeyY': { fret: 2, str: 5 },
-  'KeyH': { fret: 3, str: 5 },
-  'KeyB': { fret: 4, str: 5 },
+  'Digit6': { fret: 4, str: 5 },
+  'KeyY': { fret: 3, str: 5 },
+  'KeyH': { fret: 2, str: 5 },
+  'KeyB': { fret: 1, str: 5 },
 
-  'Digit7': { fret: 5, str: 0 },
-  'KeyU': { fret: 6, str: 0 },
-  'KeyJ': { fret: 7, str: 0 },
-  'KeyN': { fret: 8, str: 0 },
+  'Digit7': { fret: 8, str: 0 },
+  'KeyU': { fret: 7, str: 0 },
+  'KeyJ': { fret: 6, str: 0 },
+  'KeyN': { fret: 5, str: 0 },
 
-  'Digit8': { fret: 5, str: 1 },
-  'KeyI': { fret: 6, str: 1 },
-  'KeyK': { fret: 7, str: 1 },
-  'KeyM': { fret: 8, str: 1 },
+  'Digit8': { fret: 8, str: 1 },
+  'KeyI': { fret: 7, str: 1 },
+  'KeyK': { fret: 6, str: 1 },
+  'KeyM': { fret: 5, str: 1 },
 
-  'Digit9': { fret: 5, str: 2 },
-  'KeyO': { fret: 6, str: 2 },
-  'KeyL': { fret: 7, str: 2 },
-  'Comma': { fret: 8, str: 2 },
+  'Digit9': { fret: 8, str: 2 },
+  'KeyO': { fret: 7, str: 2 },
+  'KeyL': { fret: 6, str: 2 },
+  'Comma': { fret: 5, str: 2 },
 
-  'Digit0': { fret: 5, str: 3 },
-  'KeyP': { fret: 6, str: 3 },
-  'Semicolon': { fret: 7, str: 3 },
-  'Period': { fret: 8, str: 3 },
+  'Digit0': { fret: 8, str: 3 },
+  'KeyP': { fret: 7, str: 3 },
+  'Semicolon': { fret: 6, str: 3 },
+  'Period': { fret: 5, str: 3 },
 
-  'Minus': { fret: 5, str: 4 },
-  'BracketLeft': { fret: 6, str: 4 },
-  'Quote': { fret: 7, str: 4 },
-  'Slash': { fret: 8, str: 4 },
+  'Minus': { fret: 8, str: 4 },
+  'BracketLeft': { fret: 7, str: 4 },
+  'Quote': { fret: 6, str: 4 },
+  'Slash': { fret: 5, str: 4 },
 
-  'Equal': { fret: 5, str: 5 },
-  'BracketRight': { fret: 6, str: 5 },
-  'Backslash': { fret: 7, str: 5 },
-  'ShiftRight': { fret: 8, str: 5 },
+  'Equal': { fret: 8, str: 5 },
+  'BracketRight': { fret: 7, str: 5 },
+  'Backslash': { fret: 6, str: 5 },
+  'ShiftRight': { fret: 5, str: 5 },
 };
 
 const guitarSamples = {};
@@ -121,7 +121,7 @@ const isShifting = ref(false);
 const handleKeyDown = (event) => {
   if (event.repeat) return;
 
-  if (event.code === 'ArrowUp' || event.code === 'Numpad8') {
+  if (event.code === 'ArrowUp' || event.code === 'Numpad8' || event.code === 'Space') {
     playPressedKeys('up');
     return;
   }
@@ -136,7 +136,7 @@ const handleKeyDown = (event) => {
   }
 
   if (event.code === 'ArrowRight') {
-    if (capoPos.value < 13) capoPos.value += 1;
+    if (capoPos.value < 12) capoPos.value += 1;
     return;
   }
 
@@ -157,8 +157,13 @@ const handleKeyDown = (event) => {
 
 }
 
+/** @type {import('vue').Ref<Number>} */
 const capoPos = ref(0);
 
+/**
+ * 
+ * @param {'up'|'down'} strumDir
+ */
 const playPressedKeys = (strumDir) => {
   const highestPerString = Array.from({ length: 6 }, (_, i) => i).map(str =>
     activeNotes.value.filter(n => n.str === str)
