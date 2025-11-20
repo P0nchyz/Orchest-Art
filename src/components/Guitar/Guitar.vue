@@ -20,7 +20,6 @@ const { loadInstrument, playNote, stopNote } = useAudioEngine();
  * @type {import('vue').Ref<Str[]>}
  */
 const frets = ref([
-  [{ note: 'E4' }, { note: 'B3' }, { note: 'G3' }, { note: 'D3' }, { note: 'A2' }, { note: 'E2' }],
   [{ note: 'F4' }, { note: 'C4' }, { note: 'Gs3' }, { note: 'Ds3' }, { note: 'As2' }, { note: 'F2' }],
   [{ note: 'Fs4' }, { note: 'Cs4' }, { note: 'A3' }, { note: 'E3' }, { note: 'B2' }, { note: 'Fs2' }],
   [{ note: 'G4' }, { note: 'D4' }, { note: 'As3' }, { note: 'F3' }, { note: 'C3' }, { note: 'G2' }],
@@ -33,6 +32,7 @@ const frets = ref([
   [{ note: 'D5' }, { note: 'A4' }, { note: 'F4' }, { note: 'C4' }, { note: 'G3' }, { note: 'D3' }],
   [{ note: 'Ds5' }, { note: 'As4' }, { note: 'Fs4' }, { note: 'Cs4' }, { note: 'Gs3' }, { note: 'Ds3' }],
   [{ note: 'E5' }, { note: 'B4' }, { note: 'G4' }, { note: 'D4' }, { note: 'A3' }, { note: 'E3' }],
+  [{ note: 'E4' }, { note: 'B3' }, { note: 'G3' }, { note: 'D3' }, { note: 'A2' }, { note: 'E2' }],
 ]);
 
 /**
@@ -45,65 +45,65 @@ const frets = ref([
  * @type {{ [key: String]: GuitarPos }}
  */
 const keyToStrfret = {
-  'Digit1': { fret: 4, str: 0 },
-  'KeyQ': { fret: 3, str: 0 },
-  'KeyA': { fret: 2, str: 0 },
-  'IntlBackslash': { fret: 1, str: 0 },
+  'Digit1': { fret: 3, str: 0 },
+  'KeyQ': { fret: 2, str: 0 },
+  'KeyA': { fret: 1, str: 0 },
+  'IntlBackslash': { fret: 0, str: 0 },
 
-  'Digit2': { fret: 4, str: 1 },
-  'KeyW': { fret: 3, str: 1 },
-  'KeyS': { fret: 2, str: 1 },
-  'KeyZ': { fret: 1, str: 1 },
+  'Digit2': { fret: 3, str: 1 },
+  'KeyW': { fret: 2, str: 1 },
+  'KeyS': { fret: 1, str: 1 },
+  'KeyZ': { fret: 0, str: 1 },
 
-  'Digit3': { fret: 4, str: 2 },
-  'KeyE': { fret: 3, str: 2 },
-  'KeyD': { fret: 2, str: 2 },
-  'KeyX': { fret: 1, str: 2 },
+  'Digit3': { fret: 3, str: 2 },
+  'KeyE': { fret: 2, str: 2 },
+  'KeyD': { fret: 1, str: 2 },
+  'KeyX': { fret: 0, str: 2 },
 
-  'Digit4': { fret: 4, str: 3 },
-  'KeyR': { fret: 3, str: 3 },
-  'KeyF': { fret: 2, str: 3 },
-  'KeyC': { fret: 1, str: 3 },
+  'Digit4': { fret: 3, str: 3 },
+  'KeyR': { fret: 2, str: 3 },
+  'KeyF': { fret: 1, str: 3 },
+  'KeyC': { fret: 0, str: 3 },
 
-  'Digit5': { fret: 4, str: 4 },
-  'KeyT': { fret: 3, str: 4 },
-  'KeyG': { fret: 2, str: 4 },
-  'KeyV': { fret: 1, str: 4 },
+  'Digit5': { fret: 3, str: 4 },
+  'KeyT': { fret: 2, str: 4 },
+  'KeyG': { fret: 1, str: 4 },
+  'KeyV': { fret: 0, str: 4 },
 
-  'Digit6': { fret: 4, str: 5 },
-  'KeyY': { fret: 3, str: 5 },
-  'KeyH': { fret: 2, str: 5 },
-  'KeyB': { fret: 1, str: 5 },
+  'Digit6': { fret: 3, str: 5 },
+  'KeyY': { fret: 2, str: 5 },
+  'KeyH': { fret: 1, str: 5 },
+  'KeyB': { fret: 0, str: 5 },
 
-  'Digit7': { fret: 8, str: 0 },
-  'KeyU': { fret: 7, str: 0 },
-  'KeyJ': { fret: 6, str: 0 },
-  'KeyN': { fret: 5, str: 0 },
+  'Digit7': { fret: 7, str: 0 },
+  'KeyU': { fret: 6, str: 0 },
+  'KeyJ': { fret: 5, str: 0 },
+  'KeyN': { fret: 4, str: 0 },
 
-  'Digit8': { fret: 8, str: 1 },
-  'KeyI': { fret: 7, str: 1 },
-  'KeyK': { fret: 6, str: 1 },
-  'KeyM': { fret: 5, str: 1 },
+  'Digit8': { fret: 7, str: 1 },
+  'KeyI': { fret: 6, str: 1 },
+  'KeyK': { fret: 5, str: 1 },
+  'KeyM': { fret: 4, str: 1 },
 
-  'Digit9': { fret: 8, str: 2 },
-  'KeyO': { fret: 7, str: 2 },
-  'KeyL': { fret: 6, str: 2 },
-  'Comma': { fret: 5, str: 2 },
+  'Digit9': { fret: 7, str: 2 },
+  'KeyO': { fret: 6, str: 2 },
+  'KeyL': { fret: 5, str: 2 },
+  'Comma': { fret: 4, str: 2 },
 
-  'Digit0': { fret: 8, str: 3 },
-  'KeyP': { fret: 7, str: 3 },
-  'Semicolon': { fret: 6, str: 3 },
-  'Period': { fret: 5, str: 3 },
+  'Digit0': { fret: 7, str: 3 },
+  'KeyP': { fret: 6, str: 3 },
+  'Semicolon': { fret: 5, str: 3 },
+  'Period': { fret: 4, str: 3 },
 
-  'Minus': { fret: 8, str: 4 },
-  'BracketLeft': { fret: 7, str: 4 },
-  'Quote': { fret: 6, str: 4 },
-  'Slash': { fret: 5, str: 4 },
+  'Minus': { fret: 7, str: 4 },
+  'BracketLeft': { fret: 6, str: 4 },
+  'Quote': { fret: 5, str: 4 },
+  'Slash': { fret: 4, str: 4 },
 
-  'Equal': { fret: 8, str: 5 },
-  'BracketRight': { fret: 7, str: 5 },
-  'Backslash': { fret: 6, str: 5 },
-  'ShiftRight': { fret: 5, str: 5 },
+  'Equal': { fret: 7, str: 5 },
+  'BracketRight': { fret: 6, str: 5 },
+  'Backslash': { fret: 5, str: 5 },
+  'ShiftRight': { fret: 4, str: 5 },
 };
 
 const guitarSamples = {};
@@ -116,7 +116,10 @@ frets.value.forEach(fret => {
 
 /** @type {import('vue').Ref<GuitarPos[]>} */
 const activeNotes = ref([]);
+/** @type {import('vue').Ref<Boolean>} */
 const isShifting = ref(false);
+/** @type {import('vue').Ref<Boolean>} */
+const toggleShifting = ref(false);
 
 const handleKeyDown = (event) => {
   if (event.repeat) return;
@@ -132,6 +135,12 @@ const handleKeyDown = (event) => {
 
   if (event.code === 'ShiftLeft') {
     isShifting.value = true;
+    return;
+  }
+
+  if (event.code === 'CapsLock') {
+    toggleShifting.value = !toggleShifting.value;
+    isShifting.value = toggleShifting.value;
     return;
   }
 
@@ -191,7 +200,7 @@ const playPressedKeys = (strumDir) => {
 }
 
 const handleKeyUp = (event) => {
-  if (event.code === 'ShiftLeft') {
+  if (event.code === 'ShiftLeft' && !toggleShifting.value) {
     isShifting.value = false;
     return;
   }
@@ -254,20 +263,48 @@ function buttonClass(strFret) {
 </script>
 
 <template>
-  <div>
-    <div class="flex bg-[#141414]">
-      <span v-for="(fret, i) in frets" class="flex flex-col border-x-2 border-x-white">
-        <span v-for="(strFret, j) in fret" class="my-1 mx-4">
-          <button class="text-white" :class="buttonClass({ fret: i, str: j })"
-            @mousedown="handleKeyPress({ fret: i, str: j })" @mouseup="handleKeyRelease({ fret: i, str: j })"
-            @mouseleave="handleKeyRelease({ fret: i, str: j })"
-            @touchstart.prevent="handleKeyPress({ fret: i, str: j })"
-            @touchend.prevent="handleKeyRelease({ fret: i, str: j })"
-            @touchcancel.prevent="handleKeyRelease({ fret: i, str: j })">
-            {{ strFret.note }}
-          </button>
+
+  <div class="relative">
+    <div class="flex py-4 justify-center items-center">
+      <span class="w-[355px] h-[188px]" id="guitar_head"></span>
+      <span class="w-[576px] h-[144px]" id="guitar_fretboard"></span>
+      <div class="flex h-[320px] px-[64px] items-center gap-[64px] bg-[#E29D62] rounded-3xl">
+        <span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="176" height="176" viewBox="0 0 176 176" fill="none">
+            <circle cx="88" cy="88" r="88" fill="#331800" />
+          </svg>
         </span>
-      </span>
+        <span class="w-[10px] h-[144px] bg-white"></span>
+      </div>
+    </div>
+    <div class="absolute top-1/2 -translate-y-1/2 left-[355px]">
+      <div class="flex">
+        <span v-for="(fret, i) in frets" class="flex flex-col">
+          <span v-for="(strFret, j) in fret" class="h-[24px]">
+            <button class="text-white w-[48px] h-[24px]" :class="buttonClass({ fret: i, str: j })"
+              @mousedown="handleKeyPress({ fret: i, str: j })" @mouseup="handleKeyRelease({ fret: i, str: j })"
+              @mouseleave="handleKeyRelease({ fret: i, str: j })"
+              @touchstart.prevent="handleKeyPress({ fret: i, str: j })"
+              @touchend.prevent="handleKeyRelease({ fret: i, str: j })"
+              @touchcancel.prevent="handleKeyRelease({ fret: i, str: j })">
+              {{ strFret.note }}
+            </button>
+          </span>
+        </span>
+      </div>
     </div>
   </div>
 </template>
+
+<style lang="css" scoped>
+#guitar_head {
+  background-image: url('@/assets/Guitar/guitar_head.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+#guitar_fretboard {
+  background: url('@/assets/Guitar/guitar_fret.png') repeat;
+}
+</style>
